@@ -12,6 +12,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden; /* To prevent scrollbars if confetti goes out of bounds */
     }
 
     .giftbox {
@@ -20,6 +21,7 @@
       border-radius: 25px;
       box-shadow: 0 10px 20px rgba(0,0,0,0.1);
       text-align: center;
+      z-index: 10; /* Ensure giftbox is above confetti canvas if it overlaps */
     }
 
     .giftbox h1 {
@@ -82,26 +84,17 @@
       margin-top: 15px;
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
 <div class="giftbox">
   <h1>🎁 Open Your Surprise!</h1>
   <div class="icons">
-    <div class="icon-btn" onclick="openModal('letter')">💌</div>
+    <div class="icon-btn" onclick="window.location.href='https://gifft.me/o/l/65s2t0sbesty0wparqn2d72e'">💌</div>
     <div class="icon-btn" onclick="openModal('flowers')">💐</div>
     <div class="icon-btn" onclick="openModal('customPicture')">🖼️</div>
     <div class="icon-btn" onclick="openModal('song')">🎵</div>
-  </div>
-</div>
-
-<div class="modal" id="letter">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeModal('letter')">&times;</span>
-    <h2>A Letter Just for You 💌</h2>
-    <p>Dear you,<br><br>
-    You’re cherished, appreciated, and always bring a little sunshine wherever you go. Stay magical! ✨<br><br>
-    Love,<br>Me 🥰</p>
   </div>
 </div>
 
@@ -118,8 +111,7 @@
   <div class="modal-content">
     <span class="close-btn" onclick="closeModal('customPicture')">&times;</span>
     <h2>A Special Picture Just for You 📸</h2>
-    <img src="special-image.png" alt="A Special Birthday Picture">
-    <p>Hope this brings a big smile to your face! 😊</p>
+    <img src="special-image.png" alt="A Special Birthday Picture"> <p>Hope this brings a big smile to your face! 😊</p>
   </div>
 </div>
 
@@ -128,21 +120,25 @@
     <span class="close-btn" onclick="closeSongModal()">&times;</span>
     <h2>A Special Song For You 🎶</h2>
     <audio id="birthdayAudioPlayer" controls>
-      <source src="birthday-song.mp3.mp3" type="audio/mpeg">
-      Your browser does not support the audio element. Please try a different browser.
+      <source src="birthday-song.mp3" type="audio/mpeg"> Your browser does not support the audio element. Please try a different browser.
     </audio>
     <p>Listen closely, it's made with love!</p>
   </div>
 </div>
 
 <script>
+  // Trigger confetti on page load
+  window.onload = function() {
+    confetti({
+      particleCount: 150, // Number of confetti particles
+      spread: 90,         // How far the confetti spreads
+      origin: { y: 0.6 }, // Where the confetti originates from (0.6 is 60% from the top)
+      zIndex: 1000        // Ensure confetti is on top (or adjust as needed)
+    });
+  };
+
   function openModal(id) {
     document.getElementById(id).style.display = 'flex';
-    // If you want the song to attempt to play automatically when opened (can be blocked by browsers)
-    // if (id === 'song') {
-    //   const audioPlayer = document.getElementById('birthdayAudioPlayer');
-    //   audioPlayer.play().catch(error => console.log("Autoplay prevented: ", error));
-    // }
   }
 
   function closeModal(id) {
@@ -155,8 +151,10 @@
     const audioPlayer = document.getElementById('birthdayAudioPlayer');
 
     songModal.style.display = 'none';
-    audioPlayer.pause();
-    audioPlayer.currentTime = 0; // Optional: Rewind song to the beginning
+    if (audioPlayer) { // Check if audioPlayer exists
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0; // Optional: Rewind song to the beginning
+    }
   }
 </script>
 
