@@ -9,10 +9,12 @@
       font-family: 'Comic Sans MS', cursive;
       background: #fff0f5;
       display: flex;
+      flex-direction: column; /* Allow footer to be placed below */
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh; /* Ensure body takes full viewport height */
       overflow: hidden; /* To prevent scrollbars if confetti goes out of bounds */
+      position: relative; /* For absolute positioning of footer */
     }
 
     .giftbox {
@@ -22,6 +24,7 @@
       box-shadow: 0 10px 20px rgba(0,0,0,0.1);
       text-align: center;
       z-index: 10; /* Ensure giftbox is above confetti canvas if it overlaps */
+      margin-bottom: 40px; /* Add some space above the footer */
     }
 
     .giftbox h1 {
@@ -31,7 +34,7 @@
     .icons {
       display: flex;
       justify-content: center;
-      gap: 30px; /* Increased gap slightly for the new icon */
+      gap: 30px;
     }
 
     .icon-btn {
@@ -76,12 +79,30 @@
     img {
       max-width: 100%;
       border-radius: 15px;
-      margin-top: 10px; /* Added some margin for images in modals */
+      margin-top: 10px;
     }
 
     audio {
-      width: 100%; /* Make audio player responsive */
+      width: 100%;
       margin-top: 15px;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.8em;
+      color: #888;
+    }
+
+    .footer a { /* Style for links in footer, if you add any */
+      color: #888;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -126,14 +147,18 @@
   </div>
 </div>
 
+<div class="footer">
+  Made with love by Saksham and Sam
+</div>
+
 <script>
   // Trigger confetti on page load
   window.onload = function() {
     confetti({
-      particleCount: 150, // Number of confetti particles
-      spread: 90,         // How far the confetti spreads
-      origin: { y: 0.6 }, // Where the confetti originates from (0.6 is 60% from the top)
-      zIndex: 1000        // Ensure confetti is on top (or adjust as needed)
+      particleCount: 150,
+      spread: 90,
+      origin: { y: 0.6 },
+      zIndex: 1000
     });
   };
 
@@ -145,15 +170,14 @@
     document.getElementById(id).style.display = 'none';
   }
 
-  // Special function to close the song modal and pause the audio
   function closeSongModal() {
     const songModal = document.getElementById('song');
     const audioPlayer = document.getElementById('birthdayAudioPlayer');
 
     songModal.style.display = 'none';
-    if (audioPlayer) { // Check if audioPlayer exists
+    if (audioPlayer) {
         audioPlayer.pause();
-        audioPlayer.currentTime = 0; // Optional: Rewind song to the beginning
+        audioPlayer.currentTime = 0;
     }
   }
 </script>
